@@ -1,0 +1,33 @@
+# depslib dependency file v1.0
+1543001222 source:c:\users\konrad\documents\programowanie\codeblocks\sms_lab_5_6\dmc.c
+	"DMC.h"
+	<stdlib.h>
+	<string.h>
+
+1543001743 c:\users\konrad\documents\programowanie\codeblocks\sms_lab_5_6\dmc.h
+	<inttypes.h>
+	"mat_lib.h"
+
+1542997565 c:\users\konrad\documents\programowanie\codeblocks\sms_lab_5_6\mat_lib.h
+
+1543001706 source:c:\users\konrad\documents\programowanie\codeblocks\sms_lab_5_6\mat_lib.c
+	"mat_lib.h"
+	<stdio.h>
+	<stdlib.h>
+
+1542995740 source:c:\users\konrad\documents\programowanie\codeblocks\sms_lab_5_6\pid.c
+	"PID.h"
+
+1543008787 c:\users\konrad\documents\programowanie\codeblocks\sms_lab_5_6\pid.h
+	<inttypes.h>
+
+1543008867 source:c:\users\konrad\documents\programowanie\codeblocks\sms_lab_5_6\main.c
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+	"PID.h"
+	"DMC.h"
+	"DMC_data.h"
+
+1543007173 c:\users\konrad\documents\programowanie\codeblocks\sms_lab_5_6\dmc_data.h
+
