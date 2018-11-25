@@ -1,9 +1,9 @@
 load('s.mat')
 
 D = length(s); % horyzont dynamiki
-N=D;
+N=5;
 Nu=2;
-lambda = 0.1
+lambda = 1
 run('DMC_init.m');
 
 Ke = sum(K(1,:));

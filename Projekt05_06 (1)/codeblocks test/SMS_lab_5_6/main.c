@@ -58,16 +58,19 @@ float get_y_zad(uint32_t k)
 
 float simulate_object(float u)
 {
-    static float prev_y = 0.0;
+    static float y1=0.0, y2=0.0;
     float y;
 
-    y = 0.98*prev_y + 0.02*u;
+    float b1=0.0174, a1=1.7255, a2=-0.7429;
+
+    y = b1*u + a1*y1 + a2*y2;
 
     if(y>2047)
         y = 2047;
     else if(y<-2048)
         y = -2048;
 
-    prev_y = y;
+    y2 = y1;
+    y1 = y;
     return y;
 }
