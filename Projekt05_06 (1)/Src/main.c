@@ -37,6 +37,7 @@
 #include "stm32746g_discovery_ts.h"
 #include <string.h>
 #include "DMC_data.h"
+#include "PID_data.h"
 #include "DMC.h"
 #include "PID.h"
 
@@ -144,7 +145,7 @@ int main(void)
   MX_TIM5_Init();	
 	
 	DMC_init(&dmc, DMC_D, DMC_Ke, DMC_Ku, y_zad);
-	PID_init(&pid, 1, 10000, 0 , 0); ///////////////////// TO DO
+	PID_init(&pid, PID_Tp, PID_K, PID_Ti, PID_Td, PID_Tv);
 
 	HAL_Delay(100);
 	MX_TIM2_Init();
