@@ -187,17 +187,20 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 		
 		
 		
-		u = PID_get_control(&pid, e, 2047, -2048);///////////////////// TO DO
+		u = PID_get_control(&pid, e, 2047, -2048);
 		u = DMC_get_control(&dmc, e, 2047, -2048);
 		 
 		if(u < -2048.0f) u = -2048.0f;
 		if(u >  2047.0f) u =  2047.0f;
 		output = u+2048.0f; // przejscie z -2048 - 2047 do 0 - 4095
 		updateControlSignalValue(output); // aplikacja natychmiast po wyznaczeniu sterowania czy opoznic?
-				
-		while(HAL_UART_GetState(&huart) == HAL_UART_STATE_BUSY_TX);
-		sprintf(text,"U=%+8.2f;Y=%+8.2f;Yzad=%+8.2f;\n\r",u,y,y_zad); // 22 znaki
-		BSP_LCD_DisplayStringAtLine(5, (uint8_t*)text);
+		
+		sprintf(text,"U=%+8.2f;Y=%+8.2f;",u,y); // 22 znaki
+		BSP_LCD_DisplayStringAtLine(4, (uint8_t*)text);
+		sprintf(text+strlen(text),"Yzad=%+8.2f;\n\r",y_zad); // 22 znaki
+		BSP_LCD_DisplayStringAtLine(5, (uint8_t*)text+strlen(text));
+		
+		while(HAL_UART_GetState(&huart) == HAL_UART_STATE_BUSY_TX);		
 		if(HAL_UART_Transmit_IT(&huart, (uint8_t*)text, 40)!= HAL_OK){
 			Error_Handler();   
 		}

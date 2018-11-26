@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <windows.h>
 #include "PID.h"
+#include "PID_data.h"
 #include "DMC.h"
 #include "DMC_data.h"
 float get_y_zad(uint32_t);
@@ -23,6 +24,8 @@ int main()
 
 		DMC_type dmc;
 		DMC_init(&dmc, DMC_D, DMC_Ke, DMC_Ku, u);
+		PID_type pid;
+		PID_init(&pid, PID_Tp, PID_K, PID_Ti, PID_Td, PID_Tv);
 
     while(1)
     {
@@ -32,7 +35,8 @@ int main()
 		y = (input);//-2048.0f); // przejscie z 0 - 4095 do -2048 - 2047
 		e = y_zad-y;
 
-		u = DMC_get_control(&dmc, e, 2047, -2048);
+		//u = DMC_get_control(&dmc, e, 2047, -2048);
+		u = PID_get_control(&pid, e, 2047, -2048);
 
 		if(u < -2048.0f) u = -2048.0f;
 		if(u >  2047.0f) u =  2047.0f;

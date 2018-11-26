@@ -8,8 +8,8 @@ daneDynWerY = y';
 dataLength = length(daneDynUczU);
 %clear daneDynUcz daneDynWer
 
-Nmax = 1;
-Na=0;
+Nmax = 2;
+Na=2;
 Nb=Na;
 N=1;
 minErrVerify = 100000.0;

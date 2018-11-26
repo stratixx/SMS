@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//#define MICROCONTROLLER_USED
+#define MICROCONTROLLER_USED
 
 static void error(const char * err){
 	#ifdef MICROCONTROLLER_USED
