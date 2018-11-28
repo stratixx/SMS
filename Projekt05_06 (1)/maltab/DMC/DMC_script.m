@@ -1,9 +1,9 @@
-load('s.mat')
+load('s_D44.mat')
 
 D = length(s); % horyzont dynamiki
 N=5;
-Nu=2;
-lambda = 1
+Nu=1;
+lambda = 0.1
 run('DMC_init.m');
 
 Ke = sum(K(1,:));
