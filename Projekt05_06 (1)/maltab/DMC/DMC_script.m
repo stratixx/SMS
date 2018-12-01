@@ -1,45 +1,22 @@
+% Autor:		Konrad Winnicki
+% E-mail:		konrad_winnicki@wp.pl
+% Przedmiot:	SMS
+% Semestr:		18Z
+% Opis:			Skrypt wyliczaj¹cy parametry regulatora DMC
+%				przeznaczonego do uruchomienia w systemie wbudowanym
+
+% Za³adowanie odpowiedzi skokowej obiektu
 load('s_D44.mat')
 
-D = length(s); % horyzont dynamiki
-N=5;
-Nu=1;
-lambda = 0.1
+% Za³o¿one parametry regulatora
+D = length(s);		% horyzont dynamiki
+N=5;				% horyzont predykcji
+Nu=1;				% horyzont sterowania
+lambda = 0.1		% kara za zmiennoœæ sterowania
 run('DMC_init.m');
 
 Ke = sum(K(1,:));
 Ku = K(1,:)*Mp;
 
+% wyeksportowanie wyznaczonych parametrów do pliku nag³ówkowego zgodnego ze standardem jêzyka C
 run('exporter.m');
-%{
-TRASH
-       %trajektoria swobodna
-        yo = y(k)*ones(D,1)+Mp*flip(deltaUp((k-D+1):(k-1)));
-        %przysz³e sterowania
-        deltau = K*(yzad(k:(k+D-1))'-yo);
-        %bie¿¹ca zmiana sterowania
-        deltaUp(k) = deltau(1);
-        %sygna³ sterujcy regulatora DMC       
-        u(k) = u(k-1)+deltau(1);
-  
-Ke - suma pierwszego wiersza K
-Ku - wektor D-1, pierwszy wiersz K razy Mp
-delta_u = Ke*e - Ku*delta_u_past;
-u = u_past + delta_u;
-shift_vector(&delta_u_past);
-insert_element_at_end(&delta_u_past, delta_u);
-
-
-y_zad = 500;
-y = 502;
-u_past = 500;
-
-delta_u_past = zeros(D-1,1);
-e = y_zad - y;
-delta_u = Ke*e - Ku*delta_u_past; % Ke jest skalarem, Ku wektorem o d³ugoœci D-1
-u = u_past + delta_u;
-% ogranicznik u
-delta_u = u-u_past;
-u_past = u;
-%shift_vector(&delta_u_past);
-%insert_element_at_end(&delta_u_past, delta_u);
-%}

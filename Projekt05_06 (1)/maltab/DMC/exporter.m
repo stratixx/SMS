@@ -1,7 +1,13 @@
-%skrypt eksportuj¹cy wyliczone parametry regulatora DMC do postaci
-%akceptowanej przez kompilator jêzyka C
+% Autor:		Konrad Winnicki
+% E-mail:		konrad_winnicki@wp.pl
+% Przedmiot:	SMS
+% Semestr:		18Z
+% Opis:			Skrypt eksportuj¹cy wyliczone parametry regulatora DMC do postaci
+%				zgodnej ze standardem jêzyka C
 
+% powstanie plik "DMC_data.h" w folderze Inc
 fileID = fopen('../../Inc/DMC_data.h','w');
+
 fprintf(fileID,'#ifndef DMC_DATA_H\n#define DMC_DATA_H\n\n');
 fprintf(fileID,'#include <inttypes.h>\n\n', D);
 

@@ -144,7 +144,9 @@ int main(void)
   MX_TIM4_Init();
   MX_TIM5_Init();	
 	
+	// inicjacja struktury regulatora DMC
 	DMC_init(&dmc, DMC_D, DMC_Ke, DMC_Ku, y_zad);
+	// inicjacja struktury regulatora PID
 	PID_init(&pid, PID_Tp, PID_K, PID_Ti, PID_Td, PID_Tv);
 
 	HAL_Delay(100);
@@ -178,27 +180,23 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	
 	if(htim->Instance == TIM2){
 		static float y = 0.0f;
-		static float u = 0.0f;
-		
+		static float u = 0.0f;		
 		float e = 0;
 				
 		y = (input-2048.0f); // przejscie z 0 - 4095 do -2048 - 2047
-		e = y_zad-y;
+		e = y_zad-y;		 // uchyb sterowania
 		
+		u = PID_get_control(&pid, e, 2047, -2048); // nowe sterowanie PID
+		//u = DMC_get_control(&dmc, e, 2047, -2048); // nowe sterowanie DMC
 		
-		
-		u = PID_get_control(&pid, e, 2047, -2048);
-		//u = DMC_get_control(&dmc, e, 2047, -2048);
-		 
+		// ograniczenia sterowania
 		if(u < -2048.0f) u = -2048.0f;
 		if(u >  2047.0f) u =  2047.0f;
 		output = u+2048.0f; // przejscie z -2048 - 2047 do 0 - 4095
-		updateControlSignalValue(output); // aplikacja natychmiast po wyznaczeniu sterowania czy opoznic?
-		
-		sprintf(text,"U=%+8.2f;Y=%+8.2f;Yzad=%+8.2f;\n\r",u,y,y_zad); // 22 znaki
-		BSP_LCD_DisplayStringAtLine(4, (uint8_t*)text);
-		//sprintf(text+strlen(text),"Yzad=%+8.2f;\n\r",y_zad); // 22 znaki
-		//BSP_LCD_DisplayStringAtLine(5, (uint8_t*)text+strlen(text));
+		updateControlSignalValue(output);		
+		// synteza danych przesy³anych do komputera
+		sprintf(text, "U=%+8.2f;Y=%+8.2f;Yzad=%+8.2f;\n\r", u, y, y_zad);
+		//BSP_LCD_DisplayStringAtLine(4, (uint8_t*)text);
 		
 		while(HAL_UART_GetState(&huart) == HAL_UART_STATE_BUSY_TX);		
 		if(HAL_UART_Transmit_IT(&huart, (uint8_t*)text, 40)!= HAL_OK){
