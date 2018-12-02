@@ -1,22 +1,23 @@
-#include "PID.h"
+ï»¿#include "PID.h"
 
 /*
+* Plik:			PID.c
 * Autor:		Konrad Winnicki
 * E-mail:		konrad_winnicki@wp.pl
 * Przedmiot:	SMS
 * Semestr:		18Z
-* Opis:			Biblioteka implementuj¹ca regulator PID z funkcjonalnoœci¹ anti wind-up
+* Opis:			Biblioteka implementuÄ…ca regulator PID z funkcjonalnoÅ›ciÄ… anti wind-up
 */
 
 
 /*
-*	Inicjacja struktury regulatora PID funkcjonalnoœci¹ z anti wind-up
-*	pid			-	 wskaŸnik na strukturê PID
-*	_PID_Tp		-	 okres próbkowania
-*	_PID_K		-	 wzmocnienie cz³onu proporcjonalnego P
-*	_PID_Ti		-	 parametr cz³onu ca³kuj¹cego I
-*	_PID_Td		-	 parametr cz³onu ró¿niczkowego D
-*	_PID_Tv		-	 parametr anti wind-up; nieaktywny jeœli mniejszy od zera
+*	Inicjacja struktury regulatora PID funkcjonalnoÅ›ciÄ… z anti wind-up
+*	pid			-	 wskaÅºnik na strukturÄ™ PID
+*	_PID_Tp		-	 okres prÃ³bkowania
+*	_PID_K		-	 wzmocnienie czÅ‚onu proporcjonalnego P
+*	_PID_Ti		-	 parametr czÅ‚onu caÅ‚kujÄ…cego I
+*	_PID_Td		-	 parametr czÅ‚onu rÃ³Åºniczkowego D
+*	_PID_Tv		-	 parametr anti wind-up; nieaktywny jeÅ›li mniejszy od zera
 */
 void PID_init(PID_type* pid, float _PID_Tp, float _PID_K, float _PID_Ti, float _PID_Td, float _PID_Tv)
 {
@@ -33,11 +34,11 @@ void PID_init(PID_type* pid, float _PID_Tp, float _PID_K, float _PID_Ti, float _
 }
 
 /*
-*	Wyznaczenie nowej wartoœci sterowania regulatora PID
-*	pid		-	wskaŸnik na strukturê regulatora
+*	Wyznaczenie nowej wartoÅ›ci sterowania regulatora PID
+*	pid		-	wskaÅºnik na strukturÄ™ regulatora
 *	e		-	uchyb regulacji
-*	u_max	-	maksymalna wartoœæ sterowania
-*	u_min	-	minimalna wartoœæ sterowania
+*	u_max	-	maksymalna wartoÅ›Ä‡ sterowania
+*	u_min	-	minimalna wartoÅ›Ä‡ sterowania
 */
 float PID_get_control(PID_type* pid, float e, float u_max, float u_min)
 {
@@ -45,25 +46,25 @@ float PID_get_control(PID_type* pid, float e, float u_max, float u_min)
 	float u_i = 0; // skladowa sterowania od I
 	float u_d = 0; // skladowa sterowania od D
 
-	// Ÿród³o poni¿szych wzorów: wzory (2) ze skryptu
-	// sk³adowa P równa iloczynowi wzmocnienia K i uchybu sterowania
+	// Å¹rÃ³dÅ‚o poniÅ¼szych wzorÃ³w: wzory (2) ze skryptu
+	// skÅ‚adowa P rÃ³wna iloczynowi wzmocnienia K i uchybu sterowania
 	u_p = pid->K * e;
-	// sk³adowa I powiêkszana co krok o  K*Tp*(e_past+e)/2/Ti
+	// skÅ‚adowa I powiÄ™kszana co krok o  K*Tp*(e_past+e)/2/Ti
 	u_i = pid->u_i_past + pid->K*pid->Tp*(pid->e_past + e)/2/pid->Ti;
-	// anti wind-up, aktywny jeœli Tv>0; sk³adowa I powiêkszana co krok o Tp*(u_w_past-u_past)/Tv
-	// Ÿród³o: wzór ze skryptu, str. 87
+	// anti wind-up, aktywny jeÅ›li Tv>0; skÅ‚adowa I powiÄ™kszana co krok o Tp*(u_w_past-u_past)/Tv
+	// Å¹rÃ³dÅ‚o: wzÃ³r ze skryptu, str. 87
 	if( pid->Tv > 0.0 )
 		u_i += pid->Tp*(pid->u_w_past - pid->u_past)/pid->Tv;
-	// sk³adowa D równa K*Td*(e-e_past)/Tp
+	// skÅ‚adowa D rÃ³wna K*Td*(e-e_past)/Tp
 	u_d = pid->K*pid->Td*(e - pid->e_past)/pid->Tp;
 
-	// wartoœæ sterowania równa sumie sk³adowych;
-	// Ÿród³o: wzór (1) ze skryptu
+	// wartoÅ›Ä‡ sterowania rÃ³wna sumie skÅ‚adowych;
+	// Å¹rÃ³dÅ‚o: wzÃ³r (1) ze skryptu
 	pid->u_past = u_p + u_i + u_d;
 
 	// u_w_past jest ograniczonym u_past - sterowanie przekazane do obiektu
 	pid->u_w_past = pid->u_past;
-	// na³o¿enie ograniczeñ na sterowanie
+	// naÅ‚oÅ¼enie ograniczeÅ„ sterowanie
 	if( pid->u_w_past > u_max )
 		pid->u_w_past = u_max;
 	if( pid->u_w_past < u_min )

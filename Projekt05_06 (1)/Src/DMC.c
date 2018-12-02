@@ -1,9 +1,10 @@
-#include "mat_lib.h"
+﻿#include "mat_lib.h"
 #include "DMC.h"
 #include <stdlib.h>
 #include <string.h>
 
 /*
+* Plik:			DMC.c
 * Autor:		Konrad Winnicki
 * E-mail:		konrad_winnicki@wp.pl
 * Przedmiot:	SMS

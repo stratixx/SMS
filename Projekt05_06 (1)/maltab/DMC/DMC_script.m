@@ -1,22 +1,23 @@
+ï»¿% Plik:			DMC_script.m
 % Autor:		Konrad Winnicki
 % E-mail:		konrad_winnicki@wp.pl
 % Przedmiot:	SMS
 % Semestr:		18Z
-% Opis:			Skrypt wyliczaj¹cy parametry regulatora DMC
+% Opis:			Skrypt wyliczajÄ…cy parametry regulatora DMC
 %				przeznaczonego do uruchomienia w systemie wbudowanym
 
-% Za³adowanie odpowiedzi skokowej obiektu
+% ZaÅ‚adowanie odpowiedzi skokowej obiektu
 load('s_D44.mat')
 
-% Za³o¿one parametry regulatora
+% ZaÅ‚oÅ¼one parametry regulatora
 D = length(s);		% horyzont dynamiki
 N=5;				% horyzont predykcji
 Nu=1;				% horyzont sterowania
-lambda = 0.1		% kara za zmiennoœæ sterowania
+lambda = 0.1		% kara za zmiennoÅ›Ä‡ sterowania
 run('DMC_init.m');
 
 Ke = sum(K(1,:));
 Ku = K(1,:)*Mp;
 
-% wyeksportowanie wyznaczonych parametrów do pliku nag³ówkowego zgodnego ze standardem jêzyka C
+% wyeksportowanie wyznaczonych parametrÃ³w do pliku nagÅ‚Ã³wkowego zgodnego ze standardem jÄ™zyka C
 run('exporter.m');

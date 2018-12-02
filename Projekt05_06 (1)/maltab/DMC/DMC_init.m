@@ -1,8 +1,9 @@
+﻿% Plik:			DMC_init.m
 % Autor:		Konrad Winnicki
 % E-mail:		konrad_winnicki@wp.pl
 % Przedmiot:	STP
 % Semestr:		18L
-% Opis:			Skrypt wyliczaj�cy parametry regulatora DMC
+% Opis:			Skrypt wylicząjacy parametry regulatora DMC
 
 % Wyznaczenie macierzy M
 M = zeros(D,D);

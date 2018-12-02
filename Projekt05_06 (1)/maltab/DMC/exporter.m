@@ -1,9 +1,10 @@
+ï»¿% Plik:			exporter.m
 % Autor:		Konrad Winnicki
 % E-mail:		konrad_winnicki@wp.pl
 % Przedmiot:	SMS
 % Semestr:		18Z
-% Opis:			Skrypt eksportuj¹cy wyliczone parametry regulatora DMC do postaci
-%				zgodnej ze standardem jêzyka C
+% Opis:			Skrypt eksportujÄ…cy wyliczone parametry regulatora DMC do postaci
+%				zgodnej ze standardem jÄ™zyka C
 
 % powstanie plik "DMC_data.h" w folderze Inc
 fileID = fopen('../../Inc/DMC_data.h','w');

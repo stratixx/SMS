@@ -1,4 +1,4 @@
-#ifndef DMC_DATA_H
+﻿#ifndef DMC_DATA_H
 #define DMC_DATA_H
 
 #include <inttypes.h>
