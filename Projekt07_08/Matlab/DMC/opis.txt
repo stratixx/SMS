@@ -1,0 +1,4 @@
+wentylator W1 na 50% mocy
+grza³ka startowa³a na 40% mocy (u=-10)
+skok grza³ki od 40% do 50% (od u=-10 do u=0)
+temperatura pocz¹tkowa 40 stopni
