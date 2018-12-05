@@ -35,8 +35,8 @@ int main()
 		y = (input);//-2048.0f); // przejscie z 0 - 4095 do -2048 - 2047
 		e = y_zad-y;
 
-		//u = DMC_get_control(&dmc, e, 2047, -2048);
-		u = PID_get_control(&pid, e, 2047, -2048);
+		u = DMC_get_control(&dmc, e, 2047, -2048);
+		//u = PID_get_control(&pid, e, 2047, -2048);
 
 		if(u < -2048.0f) u = -2048.0f;
 		if(u >  2047.0f) u =  2047.0f;

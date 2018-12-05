@@ -10,6 +10,7 @@
 * Przedmiot:	SMS
 * Semestr:		18Z
 * Opis:			Biblioteka implementująca regulator DMC.
+*               Wersja druga - bez uzycia malloc w DMC_get_control()
 *				Parametry regulatora wyznaczane przy pomocy dedykowanych skryptów Matlaba.
 *				Do wyznaczenia parametrów wymagana jest znana odpowiedź skokowa.
 *				Skrypty: "DMC_init.m", "DMC_script.m", "exporter.m"
@@ -54,7 +55,7 @@ float DMC_get_control(DMC_type* dmc, float e, float u_max, float u_min)
 	float delta_u;
 	float tmp;
 	float * new_delta_u_past;
-	new_delta_u_past = malloc(sizeof(float)*(dmc->D-1));
+	//new_delta_u_past = malloc(sizeof(float)*(dmc->D-1));
 
 	// iloczyn wektorów współczynników Ku i przeszłych zmian sterowania delta_u_past
 	// u(k|k) = u(k-1) + Ke*e(k) - Ku*deltaUp(k)
@@ -74,10 +75,10 @@ float DMC_get_control(DMC_type* dmc, float e, float u_max, float u_min)
 	dmc->u = tmp;
 	// przesunięcie wektora przeszłych zmian sterowania o jeden krok w tył i
 	// wstawienie bieżącej zmiany sterowania na początek
-	mat_move_down(dmc->delta_u_past, dmc->D-1, 1, delta_u, new_delta_u_past);
+	mat_move_down(dmc->delta_u_past, dmc->D-1, 1, delta_u, dmc->delta_u_past);
 	// zastąpienie przeszłego wektora nowym
-	free(dmc->delta_u_past);
-	dmc->delta_u_past = new_delta_u_past;
+	//free(dmc->delta_u_past);
+	//dmc->delta_u_past = new_delta_u_past;
 
 	return dmc->u;
 }

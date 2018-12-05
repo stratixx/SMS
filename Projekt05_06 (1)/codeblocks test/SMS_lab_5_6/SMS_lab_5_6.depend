@@ -31,23 +31,22 @@
 
 1543007173 c:\users\konrad\documents\programowanie\codeblocks\sms_lab_5_6\dmc_data.h
 
-1543001706 source:c:\users\konrad\documents\synchronizowane\studia\5 semestr\sms\sms_12_winnicki\projekt05_06 (1)\codeblocks test\sms_lab_5_6\mat_lib.c
+1543271930 source:c:\users\konrad\documents\synchronizowane\studia\5 semestr\sms\sms_12_winnicki\projekt05_06 (1)\codeblocks test\sms_lab_5_6\mat_lib.c
 	"mat_lib.h"
 	<stdio.h>
 	<stdlib.h>
 
 1542997565 c:\users\konrad\documents\synchronizowane\studia\5 semestr\sms\sms_12_winnicki\projekt05_06 (1)\codeblocks test\sms_lab_5_6\mat_lib.h
 
-1543009310 source:c:\users\konrad\documents\synchronizowane\studia\5 semestr\sms\sms_12_winnicki\projekt05_06 (1)\codeblocks test\sms_lab_5_6\dmc.c
+1544051933 source:c:\users\konrad\documents\synchronizowane\studia\5 semestr\sms\sms_12_winnicki\projekt05_06 (1)\codeblocks test\sms_lab_5_6\dmc.c
 	"DMC.h"
 	<stdlib.h>
 	<string.h>
 
-1543001743 c:\users\konrad\documents\synchronizowane\studia\5 semestr\sms\sms_12_winnicki\projekt05_06 (1)\codeblocks test\sms_lab_5_6\dmc.h
+1543691402 c:\users\konrad\documents\synchronizowane\studia\5 semestr\sms\sms_12_winnicki\projekt05_06 (1)\codeblocks test\sms_lab_5_6\dmc.h
 	<inttypes.h>
-	"mat_lib.h"
 
-1543266681 source:c:\users\konrad\documents\synchronizowane\studia\5 semestr\sms\sms_12_winnicki\projekt05_06 (1)\codeblocks test\sms_lab_5_6\main.c
+1544051758 source:c:\users\konrad\documents\synchronizowane\studia\5 semestr\sms\sms_12_winnicki\projekt05_06 (1)\codeblocks test\sms_lab_5_6\main.c
 	<stdio.h>
 	<stdlib.h>
 	<windows.h>
@@ -59,10 +58,10 @@
 1543266130 c:\users\konrad\documents\synchronizowane\studia\5 semestr\sms\sms_12_winnicki\projekt05_06 (1)\codeblocks test\sms_lab_5_6\pid.h
 	<inttypes.h>
 
-1543270462 c:\users\konrad\documents\synchronizowane\studia\5 semestr\sms\sms_12_winnicki\projekt05_06 (1)\codeblocks test\sms_lab_5_6\pid_data.h
+1543271861 c:\users\konrad\documents\synchronizowane\studia\5 semestr\sms\sms_12_winnicki\projekt05_06 (1)\codeblocks test\sms_lab_5_6\pid_data.h
 	<inttypes.h>
 
-1543156871 c:\users\konrad\documents\synchronizowane\studia\5 semestr\sms\sms_12_winnicki\projekt05_06 (1)\codeblocks test\sms_lab_5_6\dmc_data.h
+1543691413 c:\users\konrad\documents\synchronizowane\studia\5 semestr\sms\sms_12_winnicki\projekt05_06 (1)\codeblocks test\sms_lab_5_6\dmc_data.h
 	<inttypes.h>
 
 1543266455 source:c:\users\konrad\documents\synchronizowane\studia\5 semestr\sms\sms_12_winnicki\projekt05_06 (1)\codeblocks test\sms_lab_5_6\pid.c
