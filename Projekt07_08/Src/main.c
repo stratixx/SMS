@@ -40,66 +40,9 @@
 #include "modbus.h"
 #include "DMC_data.h"
 #include "DMC.h"
+#include "GUI.h"
 
 /* Private variables ---------------------------------------------------------*/
-
-#define CONTROL_AUTO 						" AUTO "
-#define CONTROL_MANUAL 					"MANUAL"
-char* control_mode = CONTROL_AUTO;
-
-#define CONTROL_TEXT_AUTO				"Tzad"
-#define CONTROL_TEXT_MANUAL			"G1  "
-char* control_text = CONTROL_TEXT_AUTO;
-
-#define ALARM_NONE 							"                   "
-#define ALARM_T1_OUT_OF_RANGE 	"T1 FAILURE         "
-#define ALARM_T_TOO_LOW					"T TOO LOW          "
-#define ALARM_MODBUS_COM				"COMMUNICATION ERROR"
-char* alarm_state = ALARM_NONE;
-
-// LCD is 480x272
-#define BAR_T1_TITLE  "T1"
-#define BAR_T1_X0	10
-#define BAR_T1_Y0	10
-#define BAR_T1_WIDTH	10
-#define BAR_T1_HEIGHT	100
-
-#define BAR_G1_TITLE  "G1"
-#define BAR_G1_X0	40
-#define BAR_G1_Y0	10
-#define BAR_G1_WIDTH	10
-#define BAR_G1_HEIGHT	100
-
-#define TEXT_Tzad_TITLE  (control_text)
-#define TEXT_Tzad_X0	60
-#define TEXT_Tzad_Y0	10
-#define TEXT_Tzad_WIDTH	30
-#define TEXT_Tzad_HEIGHT	20
-
-#define BT_Tzad_PLUS_TITLE  "+"
-#define BT_Tzad_PLUS_X0	60
-#define BT_Tzad_PLUS_Y0	40
-#define BT_Tzad_PLUS_WIDTH	30
-#define BT_Tzad_PLUS_HEIGHT	20
-
-#define BT_Tzad_MINUS_TITLE  "-"
-#define BT_Tzad_MINUS_X0	60
-#define BT_Tzad_MINUS_Y0	80
-#define BT_Tzad_MINUS_WIDTH	30
-#define BT_Tzad_MINUS_HEIGHT	20
-
-#define TEXT_CONTROL_TITLE  "CONTROL"
-#define TEXT_CONTROL_X0	60
-#define TEXT_CONTROL_Y0	120
-#define TEXT_CONTROL_WIDTH	30
-#define TEXT_CONTROL_HEIGHT	20
-
-#define BT_CONTROL_TITLE  (control_mode)
-#define BT_CONTROL_X0	60
-#define BT_CONTROL_Y0	150
-#define BT_CONTROL_WIDTH	30
-#define BT_CONTROL_HEIGHT	20
-
 
 volatile float y_zad = 41.0;
 float y_zad_tab[3] = { 41, 42 ,43};
@@ -231,19 +174,9 @@ int main(void)
 	HAL_NVIC_EnableIRQ(TS_INT_EXTI_IRQn);
 	
 	HAL_Delay(100);
-	
-	BSP_LCD_DrawRect(BAR_T1_X0, BAR_T1_Y0, BAR_T1_WIDTH, BAR_T1_HEIGHT);
-	
-	BSP_LCD_DrawRect(BAR_G1_X0, BAR_G1_Y0, BAR_G1_WIDTH, BAR_G1_HEIGHT);
-	
-	BSP_LCD_DrawRect(BT_CONTROL_X0, BT_CONTROL_Y0, BT_CONTROL_WIDTH, BT_CONTROL_HEIGHT);
-	
-	BSP_LCD_DrawRect(BT_Tzad_MINUS_X0, BT_Tzad_MINUS_Y0, BT_Tzad_MINUS_WIDTH, BT_Tzad_MINUS_HEIGHT);
-	BSP_LCD_DisplayStringAt(BT_Tzad_MINUS_X0, BT_Tzad_MINUS_Y0, BT_Tzad_MINUS_TITLE, CENTER_MODE);
-	
-	BSP_LCD_DrawRect(BT_Tzad_PLUS_X0, BT_Tzad_PLUS_Y0, BT_Tzad_PLUS_WIDTH, BT_Tzad_PLUS_HEIGHT);
-	BSP_LCD_DisplayStringAt(BT_Tzad_PLUS_X0, BT_Tzad_PLUS_Y0, BT_Tzad_PLUS_TITLE, CENTER_MODE);
-	
+  
+  GUI_init();
+  GUI_repaint_all();
 	
 	/* setting the fan W1 on 50% of its power */
 	MB_SendRequest(12, FUN_WRITE_SINGLE_REGISTER, fan_half, 4);
@@ -296,7 +229,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 		static uint16_t raw_u = 0;
 		static float y = 0.0f;
 		static float u = 0.0f;
-		static uint32_t k=0;
+		//static uint32_t k=0;
 		float e = 0;
 		MB_SendRequest(12, FUN_READ_INPUT_REGISTER, get_temp, 4);
 		respstate = MB_GetResponse(12, FUN_READ_INPUT_REGISTER, &resp, &resplen, 1000);
