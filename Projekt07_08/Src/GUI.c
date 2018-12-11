@@ -17,7 +17,7 @@ char* control_mode_tab[] = { " AUTO ", "MANUAL" };
 uint8_t control_mode;
 
 char* control_mode_cv_tab[] = { "Tzad", " G1 " };
-uint8_t control_mode_cv;
+//uint8_t control_mode_cv;
 
 char* alarm_state_tab[] = { "NO ALARM           ", "T1 FAILURE         ", "T TOO LOW          ", "COMMUNICATION ERROR" };
 uint8_t alarm_state;
@@ -31,7 +31,7 @@ char tab[10];
 void GUI_init()
 {
     control_mode = CONTROL_MODE_AUTO;
-    control_mode_cv = CONTROL_MODE_CV_AUTO;
+    //control_mode_cv = CONTROL_MODE_CV_AUTO;
     alarm_state = ALARM_NONE;
 }
 
@@ -74,7 +74,7 @@ void GUI_repaint_all()
     /* tekst "adjustment" */
     BSP_LCD_DisplayStringAt(TEXT_ADJUSTMENT_X0, TEXT_ADJUSTMENT_Y0, "ADJUSTMENT:", LEFT_MODE);
     /* tekst pod "adjustment" - aktualnie sterowana wartość */
-    BSP_LCD_DisplayStringAt(TEXT_CV_X0, TEXT_CV_Y0, control_mode_cv, LEFT_MODE);
+    BSP_LCD_DisplayStringAt(TEXT_CV_X0, TEXT_CV_Y0, (uint8_t*)control_mode_cv_tab[control_mode], LEFT_MODE);
 	/* przyciski precyzyjnej zmiany wartości zadanej */ 
     BSP_LCD_DisplayStringAt(TEXT_SMALL_STEP_X0, TEXT_SMALL_STEP_Y0, "SMALL STEP:", LEFT_MODE );   
 	BSP_LCD_DrawRect(BT_CV_MINUS_SMALL_X0, BT_CV_MINUS_SMALL_Y0, BT_CV_MINUS_SMALL_WIDTH, BT_CV_MINUS_SMALL_HEIGHT);
@@ -91,7 +91,7 @@ void GUI_repaint_all()
     BSP_LCD_DisplayStringAt(TEXT_CONTROL_X0, TEXT_CONTROL_Y0,  "CONTROL MODE:", LEFT_MODE);
     /* przycisk auto/manual */
 	BSP_LCD_DrawRect(BT_CONTROL_X0, BT_CONTROL_Y0, BT_CONTROL_WIDTH, BT_CONTROL_HEIGHT);
-    BSP_LCD_DisplayStringAt(BT_CONTROL_X0+5, BT_CONTROL_Y0+5, control_mode, LEFT_MODE);
+    BSP_LCD_DisplayStringAt(BT_CONTROL_X0+5, BT_CONTROL_Y0+5, (uint8_t*)control_mode_tab[control_mode], LEFT_MODE);
     
     /* rysowanie obszaru alarmów */
     /* napis "ALARMS:" */
@@ -101,7 +101,7 @@ void GUI_repaint_all()
         BSP_LCD_SetBackColor(LCD_COLOR_GREEN);
     else
         BSP_LCD_SetBackColor(TEXT_ALARMS_BACKGROUND);
-    BSP_LCD_DisplayStringAt(TEXT_ALARMS_FIELD_X0, TEXT_ALARMS_FIELD_Y0, alarm_state_tab[alarm_state], LEFT_MODE);
+    BSP_LCD_DisplayStringAt(TEXT_ALARMS_FIELD_X0, TEXT_ALARMS_FIELD_Y0, (uint8_t*)alarm_state_tab[alarm_state], LEFT_MODE);
 }
 
 /*
@@ -204,9 +204,14 @@ void GUI_display_auto_manual(uint8_t mode)
     if( control_mode == mode )
         return;
     control_mode = mode;
-    control_mode_cv = mode;
+    //control_mode_cv = mode;
 
+    BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
+    /* przycisk auto/manual */
+    BSP_LCD_DisplayStringAt(BT_CONTROL_X0+5, BT_CONTROL_Y0+5, (uint8_t*)control_mode_tab[control_mode], LEFT_MODE);
     
+    /* tekst pod "adjustment" - aktualnie sterowana wartość */
+    BSP_LCD_DisplayStringAt(TEXT_CV_X0, TEXT_CV_Y0, (uint8_t*)control_mode_cv_tab[control_mode], LEFT_MODE);
 }
 
 void GUI_display_alarm(uint8_t alarm)
@@ -215,6 +220,13 @@ void GUI_display_alarm(uint8_t alarm)
         return;
     alarm_state = alarm;
 
+    /* pole wyświetlania alarmów */
+    if(alarm_state==ALARM_NONE)
+        BSP_LCD_SetBackColor(LCD_COLOR_GREEN);
+    else
+        BSP_LCD_SetBackColor(TEXT_ALARMS_BACKGROUND);
 
-    
+    BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
+    BSP_LCD_DisplayStringAt(TEXT_ALARMS_FIELD_X0, TEXT_ALARMS_FIELD_Y0, (uint8_t*)alarm_state_tab[alarm_state], LEFT_MODE); 
+    BSP_LCD_SetBackColor(LCD_COLOR_WHITE);   
 }

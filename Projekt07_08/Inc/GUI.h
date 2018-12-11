@@ -5,20 +5,20 @@
 
 
 /* tryby zadawania wartości zadanej auto/manual */
-extern char* control_mode_tab[];
-extern char* control_mode;
-#define CONTROL_MODE_AUTO 			control_mode_tab[0]
-#define CONTROL_MODE_MANUAL 		control_mode_tab[1]
+//extern char* control_mode_tab[];
+//extern uint8_t control_mode;
+#define CONTROL_MODE_AUTO 			0
+#define CONTROL_MODE_MANUAL 		1
 
 /* sterowana wartość */
-extern char* control_mode_cv_tab[];
-extern char* control_mode_cv;
-#define CONTROL_MODE_CV_AUTO		control_mode_cv_tab[0]
-#define CONTROL_MODE_CV_MANUAL		control_mode_cv_tab[1]
+//extern char* control_mode_cv_tab[];
+//extern uint8_t control_mode_cv;
+//#define CONTROL_MODE_CV_AUTO		0
+//#define CONTROL_MODE_CV_MANUAL		1
 
 /* alarmy */
-extern char* alarm_state_tab[];
-extern uint8_t alarm_state;
+//extern char* alarm_state_tab[];
+//extern uint8_t alarm_state;
 #define ALARM_NONE 				    0	
 #define ALARM_T1_OUT_OF_RANGE 	    1
 #define ALARM_T_TOO_LOW				2
@@ -172,15 +172,50 @@ extern uint8_t alarm_state;
 #define MODEL_VIEW_T5_COLOR	LCD_COLOR_ORANGE
 
 
-
+/* 
+*   Inicjacja GUI
+*/
 void GUI_init(void);
+
+/*
+*   Przerysowanie wszystkich elementów
+*/
 void GUI_repaint_all(void);
+
+/*
+*   Wyswietlenie zmierzonej wartości G1
+*/
 void GUI_display_G1_value(float);
+
+/*
+*   Wyświetlenie zmierzonej wartości T1
+*/
 void GUI_display_T1_value(float);
+
+/*
+*   Wyświeltenie limitów T1
+*/
 void GUI_display_T1_limits(float max, float min);
+
+/*
+*   Wyswietlenie wartości zadanej T1
+*/
 void GUI_display_T1_setpoint(float);
+
+/*
+*   Wyświetlenie wartości W1
+*/
 void GUI_display_W1_value(float);
+
+/*
+* Wyświetlenie trybu sterowania auto/manual 
+*/
 void GUI_display_control_mode(uint8_t);
+
+/* 
+*   Wyświetlenie alarmów
+*   Wielokrotne wywołanie z tym samym argumentem nie powoduje kolejnych operacji LCD
+*/
 void GUI_display_alarm(uint8_t);
 
 #endif
