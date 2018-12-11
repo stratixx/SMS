@@ -18,11 +18,11 @@ extern char* control_mode_cv;
 
 /* alarmy */
 extern char* alarm_state_tab[];
-extern char* alarm_state;
-#define ALARM_NONE 				    alarm_state_tab[0]	
-#define ALARM_T1_OUT_OF_RANGE 	    alarm_state_tab[1]
-#define ALARM_T_TOO_LOW				alarm_state_tab[2]
-#define ALARM_MODBUS_COM_ERROR		alarm_state_tab[3]
+extern uint8_t alarm_state;
+#define ALARM_NONE 				    0	
+#define ALARM_T1_OUT_OF_RANGE 	    1
+#define ALARM_T_TOO_LOW				2
+#define ALARM_MODBUS_COM_ERROR		3
 
 
 /* słupek wartości G1 */
@@ -180,5 +180,7 @@ void GUI_display_T1_value(float);
 void GUI_display_T1_limits(float max, float min);
 void GUI_display_T1_setpoint(float);
 void GUI_display_W1_value(float);
+void GUI_display_control_mode(uint8_t);
+void GUI_display_alarm(uint8_t);
 
 #endif

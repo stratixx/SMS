@@ -14,13 +14,13 @@
 
 
 char* control_mode_tab[] = { " AUTO ", "MANUAL" };
-char* control_mode;
+uint8_t control_mode;
 
 char* control_mode_cv_tab[] = { "Tzad", " G1 " };
-char* control_mode_cv;
+uint8_t control_mode_cv;
 
-char* alarm_state_tab[] = { "                   ", "T1 FAILURE         ", "T TOO LOW          ", "COMMUNICATION ERROR" };
-char* alarm_state;
+char* alarm_state_tab[] = { "NO ALARM           ", "T1 FAILURE         ", "T TOO LOW          ", "COMMUNICATION ERROR" };
+uint8_t alarm_state;
 
 uint16_t bar_T1_green_area_min = BAR_T1_Y0+BAR_T1_HEIGHT-4;
 uint16_t bar_T1_green_area_max = BAR_T1_Y0+1;
@@ -101,7 +101,7 @@ void GUI_repaint_all()
         BSP_LCD_SetBackColor(LCD_COLOR_GREEN);
     else
         BSP_LCD_SetBackColor(TEXT_ALARMS_BACKGROUND);
-    BSP_LCD_DisplayStringAt(TEXT_ALARMS_FIELD_X0, TEXT_ALARMS_FIELD_Y0, alarm_state, LEFT_MODE);
+    BSP_LCD_DisplayStringAt(TEXT_ALARMS_FIELD_X0, TEXT_ALARMS_FIELD_Y0, alarm_state_tab[alarm_state], LEFT_MODE);
 }
 
 /*
@@ -199,3 +199,22 @@ void GUI_display_W1_value(float value)
 
 }
 
+void GUI_display_auto_manual(uint8_t mode)
+{
+    if( control_mode == mode )
+        return;
+    control_mode = mode;
+    control_mode_cv = mode;
+
+    
+}
+
+void GUI_display_alarm(uint8_t alarm)
+{
+    if( alarm == alarm_state )
+        return;
+    alarm_state = alarm;
+
+
+    
+}
