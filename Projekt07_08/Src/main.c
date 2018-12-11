@@ -286,11 +286,15 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	if (htim->Instance == TIM5){ // timer5 - 10Hz
 		
 		button_touch_past[0] = button_touch[0];
-		button_touch_past[1] = button_touch[0];
-		button_touch_past[2] = button_touch[0];
-		button_touch_past[3] = button_touch[0];
-		button_touch_past[4] = button_touch[0];
-		button_touch[5] = {0,0,0,0,0};
+		button_touch_past[1] = button_touch[1];
+		button_touch_past[2] = button_touch[2];
+		button_touch_past[3] = button_touch[3];
+		button_touch_past[4] = button_touch[4];
+		button_touch[0] = 0;
+		button_touch[1] = 0;
+		button_touch[2] = 0;
+		button_touch[3] = 0;
+		button_touch[4] = 0;
 		/* Touch Screen and LCD usage */
 		BSP_TS_GetState(&TS_State);				
 		
