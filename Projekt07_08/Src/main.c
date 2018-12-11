@@ -46,9 +46,10 @@
 
 volatile float y_zad = 41.0;
 float y_zad_tab[3] = { 41, 42 ,43};
-volatile uint8_t button_touch = 0;
-volatile uint8_t button_touch_past = 0;
-
+volatile uint8_t button_touch[5] = {0,0,0,0,0};
+volatile uint8_t button_touch_past = {0,0,0,0,0};
+volatile uint8_t mode;
+uint16_t touch_index;
 // DMC structure
 DMC_type dmc;
 
@@ -283,21 +284,112 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 		Timer50usTick();
 	}
 	if (htim->Instance == TIM5){ // timer5 - 10Hz
-		button_touch_past = button_touch;
-		button_touch = 0;
+		
+		button_touch_past[0] = button_touch[0];
+		button_touch_past[1] = button_touch[0];
+		button_touch_past[2] = button_touch[0];
+		button_touch_past[3] = button_touch[0];
+		button_touch_past[4] = button_touch[0];
+		button_touch[5] = {0,0,0,0,0};
 		/* Touch Screen and LCD usage */
-		BSP_TS_GetState(&TS_State);		
+		BSP_TS_GetState(&TS_State);				
+		
 		if( TS_State.touchDetected>0 )
 		{			
-			button_touch = 1;			
+					for(touch_index = 0; touch_index < TS_State.touchDetected; ++touch_index)
+					{
+						if(TS_State.touchX[touch_index] >= BT_CONTROL_X0 && TS_State.touchX[touch_index] <= BT_CONTROL_X0 + BT_CONTROL_WIDTH && 
+							 TS_State.touchY[touch_index] >= BT_CONTROL_Y0 && TS_State.touchY[touch_index] <= BT_CONTROL_Y0 + BT_CONTROL_HEIGHT)	// AUTO / MANUAL
+								button_touch[0] = 1; 						
+						else
+								button_touch[0] = 0;
+						if(TS_State.touchX[touch_index] >= BT_CV_MINUS_BIG_X0 && TS_State.touchX[touch_index] <= BT_CV_MINUS_BIG_X0 + BT_CV_MINUS_BIG_WIDTH &&
+							 TS_State.touchY[touch_index] >= BT_CV_MINUS_BIG_Y0 && TS_State.touchY[touch_index] <= BT_CV_MINUS_BIG_Y0 + BT_CV_MINUS_BIG_HEIGHT)	// zmniejszanie zgrubne
+								button_touch[1] = 1; 						
+						else
+								button_touch[1] = 0;
+						
+						if(TS_State.touchX[touch_index] >= BT_CV_MINUS_SMALL_X0 && TS_State.touchX[touch_index] <= BT_CV_MINUS_SMALL_X0 + BT_CV_MINUS_SMALL_WIDTH &&
+  						 TS_State.touchY[touch_index] >= BT_CV_MINUS_SMALL_Y0 && TS_State.touchY[touch_index] <= BT_CV_MINUS_SMALL_Y0 + BT_CV_MINUS_SMALL_HEIGHT)	// zmniejszanie precyzyjne																			// precyzyjne
+								button_touch[2] = 1; 						
+						else
+								button_touch[2] = 0;
+						
+						if(TS_State.touchX[touch_index] >= BT_CV_PLUS_BIG_X0 && TS_State.touchX[touch_index] <= BT_CV_PLUS_BIG_X0 + BT_CV_PLUS_BIG_WIDTH &&
+							 TS_State.touchY[touch_index] >= BT_CV_PLUS_BIG_Y0 && TS_State.touchY[touch_index] <= BT_CV_PLUS_BIG_Y0 + BT_CV_PLUS_BIG_HEIGHT)	// zwiekszanie zgrubne
+								button_touch[3] = 1; 						
+						else
+								button_touch[3] = 0;
+						
+						if(TS_State.touchX[touch_index] >= BT_CV_PLUS_SMALL_X0 && TS_State.touchX[touch_index] <= BT_CV_PLUS_SMALL_X0 + BT_CV_PLUS_SMALL_WIDTH &&
+							 TS_State.touchY[touch_index] >= BT_CV_PLUS_SMALL_Y0 && TS_State.touchY[touch_index] <= BT_CV_PLUS_SMALL_Y0 + BT_CV_PLUS_SMALL_HEIGHT)	// zwiekszanie precyzyjne
+								button_touch[4] = 1; 						
+						else
+								button_touch[4] = 0;
+											
+					
+		if( button_touch[0]>0 && button_touch[0]_past==0 )	// AUTO/MANUAL
+		{
+			if(mode == CONTROL_MODE_AUTO)
+				GUI_display_control_mode(CONTROL_MODE_MANUAL);
+			if(mode == CONTROL_MODE_MANUAL)
+				GUI_display_control_mode(CONTROL_MODE_AUTO);
 		}
 		
-		if( button_touch>0 && button_touch_past==0 )
+		if( button_touch[1]>0 && button_touch[1]_past==0 )	// zgrubne zmniejszanie 
 		{
-			
-			y_zad = y_zad_tab[count++];
+				if(mode == CONTROL_MODE_AUTO)
+				{
+					y_zad = y_zad - 5.0;
+					GUI_display_T1_setpoint(y_zad);
+				}
+				if(mode == CONTROL_MODE_MANUAL)
+				{
+					u = u - 5.0;
+					GUI_display_T1_setpoint(u);
+				}
+		}		
 		
-			if(count>=3) count = 0; 
+		if( button_touch[2]>0 && button_touch[2]_past==0 )	// precyzyjne zmniejszanie
+		{
+			if(mode == CONTROL_MODE_AUTO)
+			{
+				y_zad = y_zad - 0.1;
+				GUI_display_T1_setpoint(y_zad);
+			}
+			if(mode == CONTROL_MODE_MANUAL)
+			{
+				u = u - 0.1;
+				GUI_display_T1_setpoint(u);
+			}
+		}
+		
+		if( button_touch[3]>0 && button_touch[3]_past==0 )	// zgrubne zwiekszanie
+		{
+			if(mode == CONTROL_MODE_AUTO)
+			{
+				y_zad = y_zad + 5;
+				GUI_display_T1_setpoint(y_zad);
+			}
+			if(mode == CONTROL_MODE_MANUAL)
+			{
+				u = u + 5;
+				GUI_display_T1_setpoint(u);
+			}
+		}
+		
+		if( button_touch[4]>0 && button_touch[4]_past==0 )	// precyzyjne zwiekszanie
+		{
+			if(mode == CONTROL_MODE_AUTO)
+			{
+				y_zad = y_zad + 0.1;
+				GUI_display_T1_setpoint(y_zad);
+			}
+			if(mode == CONTROL_MODE_MANUAL)
+			{
+				u = u + 0.1;
+				GUI_display_T1_setpoint(u);
+			}
 		}
 	}
 }
