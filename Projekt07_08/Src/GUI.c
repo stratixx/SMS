@@ -28,6 +28,9 @@ uint16_t bar_T1_green_area_max = BAR_T1_Y0+1;
 /* tablica na dane tymczasowe */
 char tab[10];
 
+/* 
+*   Inicjacja GUI
+*/
 void GUI_init()
 {
     control_mode = CONTROL_MODE_AUTO;
@@ -35,6 +38,9 @@ void GUI_init()
     alarm_state = ALARM_NONE;
 }
 
+/*
+*   Przerysowanie wszystkich elementów
+*/
 void GUI_repaint_all()
 {    
     BSP_LCD_SetFont(&Font12);
@@ -104,10 +110,9 @@ void GUI_repaint_all()
     BSP_LCD_DisplayStringAt(TEXT_ALARMS_FIELD_X0, TEXT_ALARMS_FIELD_Y0, (uint8_t*)alarm_state_tab[alarm_state], LEFT_MODE);
 }
 
+
 /*
-*   Odświeżenie wartości słupka G1
-*
-*   value   -   wartość do wyświetlenia
+*   Wyswietlenie zmierzonej wartości G1
 */
 void GUI_display_G1_value(float value)
 {
@@ -125,6 +130,9 @@ void GUI_display_G1_value(float value)
     BSP_LCD_DisplayStringAt(VALUE_G1_X0, VALUE_G1_Y0, (uint8_t*)tab, LEFT_MODE);
 }
 
+/*
+*   Wyświetlenie zmierzonej wartości T1
+*/
 void GUI_display_T1_value(float value)
 { 
     float y;
@@ -142,6 +150,9 @@ void GUI_display_T1_value(float value)
     BSP_LCD_DisplayStringAt(VALUE_T1_X0, VALUE_T1_Y0, (uint8_t*)tab, LEFT_MODE);
 }
 
+/*
+*   Wyświeltenie limitów T1
+*/
 void GUI_display_T1_limits(float max, float min)
 {
     bar_T1_green_area_min = (BAR_T1_HEIGHT-2-3)/2-min*(BAR_T1_HEIGHT-2-3)/(VALUE_T1_MAX-VALUE_T1_MIN); 
@@ -165,6 +176,9 @@ void GUI_display_T1_limits(float max, float min)
 
 }
 
+/*
+*   Wyswietlenie wartości zadanej T1
+*/
 void GUI_display_T1_setpoint(float value)
 {
     float y;
@@ -182,6 +196,9 @@ void GUI_display_T1_setpoint(float value)
 
 }
 
+/*
+*   Wyświetlenie wartości W1
+*/
 void GUI_display_W1_value(float value)
 {
     float y;
@@ -199,6 +216,9 @@ void GUI_display_W1_value(float value)
 
 }
 
+/*
+* Wyświetlenie trybu sterowania auto/manual 
+*/
 void GUI_display_auto_manual(uint8_t mode)
 {
     if( control_mode == mode )
@@ -214,6 +234,10 @@ void GUI_display_auto_manual(uint8_t mode)
     BSP_LCD_DisplayStringAt(TEXT_CV_X0, TEXT_CV_Y0, (uint8_t*)control_mode_cv_tab[control_mode], LEFT_MODE);
 }
 
+/* 
+*   Wyświetlenie alarmów
+*   Wielokrotne wywołanie z tym samym argumentem nie powoduje kolejnych operacji LCD
+*/
 void GUI_display_alarm(uint8_t alarm)
 {
     if( alarm == alarm_state )

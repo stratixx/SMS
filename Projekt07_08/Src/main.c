@@ -47,9 +47,10 @@
 volatile float y_zad = 41.0;
 float y_zad_tab[3] = { 41, 42 ,43};
 volatile uint8_t button_touch[5] = {0,0,0,0,0};
-volatile uint8_t button_touch_past = {0,0,0,0,0};
+volatile uint8_t button_touch_past[5] = {0,0,0,0,0};
 volatile uint8_t mode;
 uint16_t touch_index;
+float u = 0.0f;
 // DMC structure
 DMC_type dmc;
 
@@ -229,7 +230,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 		static uint16_t raw_y = 2345;
 		static uint16_t raw_u = 0;
 		static float y = 0.0f;
-		static float u = 0.0f;
+		//static float u = 0.0f;
 		//static uint32_t k=0;
 		float e = 0;
 		MB_SendRequest(12, FUN_READ_INPUT_REGISTER, get_temp, 4);
@@ -307,6 +308,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 								button_touch[0] = 1; 						
 						else
 								button_touch[0] = 0;
+						
 						if(TS_State.touchX[touch_index] >= BT_CV_MINUS_BIG_X0 && TS_State.touchX[touch_index] <= BT_CV_MINUS_BIG_X0 + BT_CV_MINUS_BIG_WIDTH &&
 							 TS_State.touchY[touch_index] >= BT_CV_MINUS_BIG_Y0 && TS_State.touchY[touch_index] <= BT_CV_MINUS_BIG_Y0 + BT_CV_MINUS_BIG_HEIGHT)	// zmniejszanie zgrubne
 								button_touch[1] = 1; 						
@@ -330,69 +332,98 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 								button_touch[4] = 1; 						
 						else
 								button_touch[4] = 0;
-											
-					
-		if( button_touch[0]>0 && button_touch[0]_past==0 )	// AUTO/MANUAL
-		{
-			if(mode == CONTROL_MODE_AUTO)
-				GUI_display_control_mode(CONTROL_MODE_MANUAL);
-			if(mode == CONTROL_MODE_MANUAL)
-				GUI_display_control_mode(CONTROL_MODE_AUTO);
+					}					
 		}
 		
-		if( button_touch[1]>0 && button_touch[1]_past==0 )	// zgrubne zmniejszanie 
+		if( button_touch[0]>0 && button_touch_past[0]==0 )	// AUTO/MANUAL
+		{
+			if(mode == CONTROL_MODE_AUTO)
+				mode = CONTROL_MODE_MANUAL;
+			if(mode == CONTROL_MODE_MANUAL)
+				mode = CONTROL_MODE_AUTO;
+			
+			GUI_display_auto_manual(mode);
+		}
+		
+		if( button_touch[1]>0 && button_touch_past[1]==0 )	// zgrubne zmniejszanie 
 		{
 				if(mode == CONTROL_MODE_AUTO)
 				{
-					y_zad = y_zad - 5.0;
+					y_zad = y_zad - 5;
+					if(y_zad < VALUE_T1_MIN)
+						y_zad = VALUE_T1_MIN;
+					
 					GUI_display_T1_setpoint(y_zad);
 				}
 				if(mode == CONTROL_MODE_MANUAL)
 				{
-					u = u - 5.0;
-					GUI_display_T1_setpoint(u);
+					u = u - 5;
+					if(u < VALUE_G1_MIN)
+						u = VALUE_G1_MIN;
+					
+					GUI_display_G1_value(u);
 				}
 		}		
 		
-		if( button_touch[2]>0 && button_touch[2]_past==0 )	// precyzyjne zmniejszanie
+		if( button_touch[2]>0 && button_touch_past[2]==0 )	// precyzyjne zmniejszanie
 		{
 			if(mode == CONTROL_MODE_AUTO)
 			{
 				y_zad = y_zad - 0.1;
+				if(y_zad < VALUE_T1_MIN)
+					y_zad = VALUE_T1_MIN;
+				
 				GUI_display_T1_setpoint(y_zad);
 			}
+			
 			if(mode == CONTROL_MODE_MANUAL)
 			{
 				u = u - 0.1;
-				GUI_display_T1_setpoint(u);
+				if(u < VALUE_G1_MIN)
+					u = VALUE_G1_MIN;
+				
+				GUI_display_G1_value(u);
 			}
 		}
 		
-		if( button_touch[3]>0 && button_touch[3]_past==0 )	// zgrubne zwiekszanie
+		if( button_touch[3]>0 && button_touch_past[3]==0 )	// zgrubne zwiekszanie
 		{
 			if(mode == CONTROL_MODE_AUTO)
 			{
 				y_zad = y_zad + 5;
+				if(y_zad > VALUE_T1_MAX)
+					y_zad = VALUE_T1_MAX;
+				
 				GUI_display_T1_setpoint(y_zad);
 			}
 			if(mode == CONTROL_MODE_MANUAL)
 			{
 				u = u + 5;
-				GUI_display_T1_setpoint(u);
+				if(u > VALUE_G1_MAX)
+					u = VALUE_G1_MAX;
+				
+				GUI_display_G1_value(u);
 			}
 		}
 		
-		if( button_touch[4]>0 && button_touch[4]_past==0 )	// precyzyjne zwiekszanie
+		if( button_touch[4]>0 && button_touch_past[4]==0 )	// precyzyjne zwiekszanie
 		{
 			if(mode == CONTROL_MODE_AUTO)
 			{
 				y_zad = y_zad + 0.1;
+				
+				if(y_zad > VALUE_T1_MAX)
+					y_zad = VALUE_T1_MAX;
+				
 				GUI_display_T1_setpoint(y_zad);
 			}
 			if(mode == CONTROL_MODE_MANUAL)
 			{
 				u = u + 0.1;
-				GUI_display_T1_setpoint(u);
+				if(u > VALUE_G1_MAX)
+					u = VALUE_G1_MAX;				
+							
+				GUI_display_G1_value(u);
 			}
 		}
 	}

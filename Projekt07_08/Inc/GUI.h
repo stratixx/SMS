@@ -210,7 +210,7 @@ void GUI_display_W1_value(float);
 /*
 * Wyświetlenie trybu sterowania auto/manual 
 */
-void GUI_display_control_mode(uint8_t);
+void GUI_display_auto_manual(uint8_t);
 
 /* 
 *   Wyświetlenie alarmów
