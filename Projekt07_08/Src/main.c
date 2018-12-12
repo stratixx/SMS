@@ -48,9 +48,11 @@ volatile float y_zad = 41.0;
 float y_zad_tab[3] = { 41, 42 ,43};
 volatile uint8_t button_touch[5] = {0,0,0,0,0};
 volatile uint8_t button_touch_past[5] = {0,0,0,0,0};
-volatile uint8_t mode;
+volatile uint8_t mode = CONTROL_MODE_AUTO;
 uint16_t touch_index;
 float u = 0.0f;
+float y_min_limit = 30;
+uint8_t alarm = ALARM_NONE;
 // DMC structure
 DMC_type dmc;
 
@@ -235,14 +237,24 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 		float e = 0;
 		MB_SendRequest(12, FUN_READ_INPUT_REGISTER, get_temp, 4);
 		respstate = MB_GetResponse(12, FUN_READ_INPUT_REGISTER, &resp, &resplen, 1000);
-		if(respstate != RESPONSE_OK) {}
+		if(respstate != RESPONSE_OK) { alarm=ALARM_MODBUS_COM_ERROR; GUI_display_alarm(alarm); while(1); } /* BLAD KOMUNIKACJI */
 		else {
 			raw_y = resp[1]*0x100+resp[2];
 			y = raw_y/100.0f;
 		}
+		//y_min_limit=
+		if( y<y_min_limit )
+			alarm = ALARM_T_TOO_LOW;
+		else if( y>200 )
+			alarm = ALARM_T1_OUT_OF_RANGE;
+		else
+			alarm = ALARM_NONE;
+		
 		e = y_zad-y;		 // uchyb sterowania
 		
-		u = DMC_get_control(&dmc, e, 50, -50); // nowe sterowanie DMC
+		if( mode==CONTROL_MODE_AUTO )
+			u = DMC_get_control(&dmc, e, 50, -50); // nowe sterowanie DMC
+		
 		
 		/* przyklady tego, jak nalezy interpretowac poszczegolne wartosci sterowania */
 		//u = -10.0; // grzanie z moca (-10+50)% =  40%
@@ -267,7 +279,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 		
 		/* odczyt odpowiedzi i sprawdzenie jej poprawnosci */
 		respstate = MB_GetResponse(12, FUN_WRITE_SINGLE_REGISTER, &resp, &resplen, 1000);
-		if(respstate != RESPONSE_OK) {}
+		if(respstate != RESPONSE_OK) {alarm=ALARM_MODBUS_COM_ERROR; GUI_display_alarm(alarm); while(1); } /* BLAD KOMUNIKACJI */
 		
 		/* komunikacja z komputerem */
 		while(HAL_UART_GetState(&huart) == HAL_UART_STATE_BUSY_TX);
@@ -276,6 +288,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 		//BSP_LCD_DisplayStringAtLine(1, (uint8_t*)txt);
 			
 		if(HAL_UART_Transmit_IT(&huart,   (uint8_t*)txt, 40)!= HAL_OK) Error_Handler();
+			
+		/* GUI refresh */
+		GUI_display_G1_value(u);
+		GUI_display_T1_value(y);
+		GUI_display_alarm(alarm);
 	} 
 	if (htim->Instance == TIM3){ // timer odpowiedzialny za aktualizacje MB i odliczanie timeout'u
 		MB();
@@ -339,7 +356,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 		{
 			if(mode == CONTROL_MODE_AUTO)
 				mode = CONTROL_MODE_MANUAL;
-			if(mode == CONTROL_MODE_MANUAL)
+			else
 				mode = CONTROL_MODE_AUTO;
 			
 			GUI_display_auto_manual(mode);
@@ -349,7 +366,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 		{
 				if(mode == CONTROL_MODE_AUTO)
 				{
-					y_zad = y_zad - 5;
+					y_zad = y_zad - 2;
 					if(y_zad < VALUE_T1_MIN)
 						y_zad = VALUE_T1_MIN;
 					
@@ -357,7 +374,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 				}
 				if(mode == CONTROL_MODE_MANUAL)
 				{
-					u = u - 5;
+					u = u - 2.0;
 					if(u < VALUE_G1_MIN)
 						u = VALUE_G1_MIN;
 					
@@ -390,7 +407,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 		{
 			if(mode == CONTROL_MODE_AUTO)
 			{
-				y_zad = y_zad + 5;
+				y_zad = y_zad + 2;
 				if(y_zad > VALUE_T1_MAX)
 					y_zad = VALUE_T1_MAX;
 				
@@ -398,7 +415,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 			}
 			if(mode == CONTROL_MODE_MANUAL)
 			{
-				u = u + 5;
+				u = u + 2;
 				if(u > VALUE_G1_MAX)
 					u = VALUE_G1_MAX;
 				
