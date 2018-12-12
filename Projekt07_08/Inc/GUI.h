@@ -39,26 +39,26 @@
 #define VALUE_G1_FONT_SIZE  12
 
 /* słupka wartości T1 */
-#define BAR_T1_X0	    70
+#define BAR_T1_X0	    80
 #define BAR_T1_Y0	    25
 #define BAR_T1_WIDTH	16
 #define BAR_T1_HEIGHT	131
 
 /* wartość T1 pod słupkiem T1 */
-#define VALUE_T1_X0	    70
+#define VALUE_T1_X0	    80
 #define VALUE_T1_Y0	    160
-#define VALUE_T1_MAX	99.9
-#define VALUE_T1_MIN	20.0
+#define VALUE_T1_MAX	65.0
+#define VALUE_T1_MIN	25.0
 #define VALUE_T1_FONT   12
 
 /* pasek wartości W1 */
-#define BAR_W1_X0	    130
+#define BAR_W1_X0	    150
 #define BAR_W1_Y0	    25
 #define BAR_W1_WIDTH	16
 #define BAR_W1_HEIGHT	131
 
 /* wartość W1 pod paskiem W1 */
-#define VALUE_W1_X0	    130
+#define VALUE_W1_X0	    150
 #define VALUE_W1_Y0	    160
 #define VALUE_W1_MAX	99.9
 #define VALUE_W1_MIN	0.0
@@ -75,13 +75,13 @@
 #define TEXT_ADJUSTMENT_FONT    12
 
 /* Tekst "SMALL STEP:" nad przyciskami precyzyjnej zmiany wartości sterowanej */
-#define TEXT_SMALL_STEP_X0	    387
+#define TEXT_SMALL_STEP_X0	    380
 #define TEXT_SMALL_STEP_Y0	    52
 #define TEXT_SMALL_STEP_FONT    12
 
 /* Tekst "BIG STEP:  " nad przyciskami grubnej zmiany wartości sterowanej */
-#define TEXT_BIG_STEP_X0	    392
-#define TEXT_BIG_STEP_Y0	    52
+#define TEXT_BIG_STEP_X0	    380
+#define TEXT_BIG_STEP_Y0	    108
 #define TEXT_BIG_STEP_FONT      12
 
 /* przycisk precyzyjnego zwiększenia wartości sterowania */
@@ -121,14 +121,14 @@
 
 /* text "ALARMS" powyżej pola wypisywania alarmów */
 #define TEXT_ALARMS_X0	            8
-#define TEXT_ALARMS_Y0	            234
-#define TEXT_ALARMS_FONT            12
+#define TEXT_ALARMS_Y0	            220
+#define TEXT_ALARMS_FONT            16
 #define TEXT_ALARMS_BACKGROUND	    LCD_COLOR_LIGHTRED
 
 /* text zawierający aktualny alarm */
 #define TEXT_ALARMS_FIELD_X0	            8
-#define TEXT_ALARMS_FIELD_Y0	            252
-#define TEXT_ALARMS_FIELD_FONT            12
+#define TEXT_ALARMS_FIELD_Y0	            245
+#define TEXT_ALARMS_FIELD_FONT            16
 
 /* struktury modelu obiektu sterowanego */
 /* prostokąt szarego tła */
